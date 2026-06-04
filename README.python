@@ -1,4 +1,4 @@
-vimport random
+import random
 
 player_team = input("Enter your team name: ")
 
