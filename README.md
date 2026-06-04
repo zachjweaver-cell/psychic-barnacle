@@ -1,1 +1,84 @@
-# psychic-barnacle
+import random
+
+player_team = input("Enter your team name: ")
+
+teams = [
+    player_team,
+    "Sharks",
+    "Bears",
+    "Wolves",
+    "Dragons",
+    "Knights",
+    "Tigers",
+    "Hawks"
+]
+
+standings = {}
+
+for team in teams:
+    standings[team] = {"W": 0, "L": 0}
+
+schedule = []
+
+# Create schedule
+for i in range(len(teams)):
+    for j in range(i + 1, len(teams)):
+        schedule.append((teams[i], teams[j]))
+
+random.shuffle(schedule)
+
+current_game = 0
+
+def play_game(team1, team2):
+    score1 = random.randint(0, 12)
+    score2 = random.randint(0, 12)
+
+    while score1 == score2:
+        score1 += random.randint(1, 3)
+        score2 += random.randint(0, 2)
+
+    if score1 > score2:
+        standings[team1]["W"] += 1
+        standings[team2]["L"] += 1
+        winner = team1
+    else:
+        standings[team2]["W"] += 1
+        standings[team1]["L"] += 1
+        winner = team2
+
+    return score1, score2, winner
+
+def show_standings():
+    print("\n===== STANDINGS =====")
+
+    sorted_teams = sorted(
+        standings.items(),
+        key=lambda x: x[1]["W"],
+        reverse=True
+    )
+
+    print(f"{'TEAM':<15}{'W':<5}{'L':<5}")
+
+    for team, record in sorted_teams:
+        print(f"{team:<15}{record['W']:<5}{record['L']:<5}")
+
+while current_game < len(schedule):
+
+    input("\nPress ENTER to play next game...")
+
+    team1, team2 = schedule[current_game]
+
+    score1, score2, winner = play_game(team1, team2)
+
+    print("\n========================")
+    print(f"{team1} vs {team2}")
+    print(f"Final: {score1}-{score2}")
+    print(f"Winner: {winner}")
+    print("========================")
+
+    show_standings()
+
+    current_game += 1
+
+print("\nSEASON COMPLETE!")
+show_standings()
